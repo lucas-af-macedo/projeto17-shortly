@@ -10,7 +10,7 @@ export async function signInEmailValidation (req, res, next){
         const email = await connection.query('SELECT * FROM users WHERE email = $1',[user.email]);
         
         if (email.rows.length){
-            res.locals.password = email.password;
+            res.locals.password = email.rows[0].password;
             next();
         } else {
             res.status(401).send({message: 'Usuário e/ou senha inválidos!'})
