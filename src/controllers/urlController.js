@@ -37,8 +37,18 @@ export async function getOneUrl (req, res){
 }
 
 export async function openUrl (req, res){
+    const shortUrl = req.params.shortUrl;
     try{
-        res.sendStatus(501);
+        const query = await connection.query('SELECT * FROM urls WHERE "shortUrl"=$1',[shortUrl]);
+        if(query.rows.length){
+            const urls = query.rows[0];
+
+            res.status(301).redirect(urls.url);
+
+            await connection.query('UPDATE urls SET "visitCount"="visitCount" + 1 WHERE "shortUrl"=$1',[shortUrl]);
+        } else{
+            res.sendStatus(404);
+        }
     } catch(err){
         res.sendStatus(500);
         console.log(err);
