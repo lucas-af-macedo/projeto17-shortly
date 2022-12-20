@@ -15,7 +15,7 @@ export async function urlValidation (req, res, next){
         res.status(422).send(errors)
         return;
     } else{
-        res.locals.url = url;
+        res.locals.url = url.url;
     }
     next();
 }
