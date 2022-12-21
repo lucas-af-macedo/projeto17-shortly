@@ -11,7 +11,7 @@ export async function signUp (req, res){
 
     try{
 
-        await connection.query('INSERT INTO users (name, email, password, "signUpDate") VALUES ($1, $2, $3, $4)', [user.name, user.email, passwordHash, now])
+        await connection.query('INSERT INTO users (name, email, password, "createdAt") VALUES ($1, $2, $3, $4)', [user.name, user.email, passwordHash, now])
         res.sendStatus(201);
     } catch(err){
         res.sendStatus(500);
@@ -30,7 +30,7 @@ export async function signIn (req, res){
             await connection.query('DELETE FROM sessions WHERE "userId"=$1',[user.id]);
         }
         
-        await connection.query('INSERT INTO sessions ("userId", token, "lastSignIn") VALUES ($1, $2, $3)',[user.id, token, now]);
+        await connection.query('INSERT INTO sessions ("userId", token, "createdAt") VALUES ($1, $2, $3)',[user.id, token, now]);
 
         res.status(200).send({token});
     } catch(err){

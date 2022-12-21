@@ -1,13 +1,16 @@
 import connection from "../database/database.js";
 import { nanoid } from "nanoid";
+import dayjs from "dayjs";
+
 
 export async function postUrl (req, res){
+    const now = dayjs().format("YYYY-MM-DD HH:mm");
     const userId = res.locals.userId;
     const url = res.locals.url;
-    const shortUrl = nanoid()
+    const shortUrl = nanoid(6);
 
     try{
-        await connection.query('INSERT INTO urls ("userId", url, "shortUrl", "visitCount") VALUES ($1, $2, $3, 0)',[userId, url, shortUrl]);
+        await connection.query('INSERT INTO urls ("userId", url, "shortUrl", "visitCount", "createdAt") VALUES ($1, $2, $3, 0)',[userId, url, shortUrl, now]);
         res.status(201).send({shortUrl});
     } catch(err){
         res.sendStatus(500);
@@ -60,7 +63,7 @@ export async function deleteUrl (req, res){
 
     try{
         await connection.query('DELETE FROM urls WHERE id=$1',[urlId]);
-        
+
         res.sendStatus(204);
     } catch(err){
         res.sendStatus(500);

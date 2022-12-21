@@ -2,7 +2,6 @@ import connection from "../database/database.js";
 
 export async function userData (req, res){
     const userId = res.locals.userId;
-    console.log(userId)
 
     try{
         const query = await connection.query(`
@@ -25,7 +24,7 @@ export async function userData (req, res){
             WHERE users.id=$1
             GROUP BY users.id
             `,[userId]);
-        console.log(query.rows);
+            
         res.status(200).send(query.rows);
     } catch(err){
         res.sendStatus(500);
