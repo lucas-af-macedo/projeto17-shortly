@@ -1,8 +1,8 @@
 import connection from "../database/database.js";
 
-export async function ranking (req, res){
-    try{
-        const query = await connection.query(`
+export async function ranking(req, res) {
+	try {
+		const query = await connection.query(`
             SELECT 
                 users.id,
                 users.name,
@@ -16,10 +16,10 @@ export async function ranking (req, res){
             ORDER BY "visitCount" DESC
             LIMIT 10
             `);
-            
-        res.status(200).send(query.rows);
-    } catch(err){
-        res.sendStatus(500);
-        console.log(err);
-    }
+
+		res.status(200).send(query.rows);
+	} catch (err) {
+		res.sendStatus(500);
+		console.log(err);
+	}
 }
