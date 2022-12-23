@@ -1,17 +1,15 @@
 import connection from "../database/database.js";
 import { nanoid } from "nanoid";
-import dayjs from "dayjs";
 
 export async function postUrl(req, res) {
-	const now = dayjs().format("YYYY-MM-DD HH:mm");
 	const userId = res.locals.userId;
 	const url = res.locals.url;
 	const shortUrl = nanoid(6);
 
 	try {
 		await connection.query(
-			'INSERT INTO urls ("userId", url, "shortUrl", "visitCount", "createdAt") VALUES ($1, $2, $3, 0, $4)',
-			[userId, url, shortUrl, now]
+			'INSERT INTO urls ("userId", url, "shortUrl") VALUES ($1, $2, $3)',
+			[userId, url, shortUrl]
 		);
 		res.status(201).send({ shortUrl });
 	} catch (err) {
@@ -53,7 +51,6 @@ export async function openUrl(req, res) {
 			const urls = query.rows[0];
 
 			res.status(301).redirect(urls.url);
-
 			await connection.query(
 				'UPDATE urls SET "visitCount"="visitCount" + 1 WHERE "shortUrl"=$1',
 				[shortUrl]

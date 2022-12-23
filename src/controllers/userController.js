@@ -26,7 +26,7 @@ export async function userData(req, res) {
             LEFT JOIN urls
             ON users.id=urls."userId"
             WHERE users.id=$1
-            GROUP BY users.id
+            GROUP BY users.id, users.name
             `,
 			[userId]
 		);
