@@ -21,26 +21,6 @@ export async function signUpValidation(req, res, next) {
 	next();
 }
 
-export async function existEmail(req, res, next) {
-	const user = res.locals.user;
-
-	try {
-		const email = await connection.query(
-			"SELECT * FROM users WHERE email = $1",
-			[user.email]
-		);
-
-		if (!email.rows.length) {
-			next();
-		} else {
-			res.status(409).send({ message: "Email já cadastrado." });
-		}
-	} catch (err) {
-		res.sendStatus(500);
-		console.log(err);
-	}
-}
-
 export async function samePassword(req, res, next) {
 	const user = res.locals.user;
 

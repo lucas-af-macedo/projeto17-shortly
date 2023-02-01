@@ -20,25 +20,3 @@ export async function urlValidation(req, res, next) {
 	}
 	next();
 }
-
-export async function urlOwner(req, res, next) {
-	const userId = res.locals.userId;
-	const id = req.params.id;
-	try {
-		const query = await connection.query("SELECT * FROM urls WHERE id=$1", [
-			id,
-		]);
-		if (query.rows.length) {
-			if (query.rows[0].userId === userId) {
-				next();
-			} else {
-				res.sendStatus(401);
-			}
-		} else {
-			res.sendStatus(404);
-		}
-	} catch (err) {
-		res.sendStatus(500);
-		console.log(err);
-	}
-}

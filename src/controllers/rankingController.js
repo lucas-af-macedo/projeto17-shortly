@@ -1,23 +1,10 @@
-import connection from "../database/database.js";
+import rankingService from "../services/rankingService.js";
 
 export async function ranking(req, res) {
 	try {
-		const query = await connection.query(`
-            SELECT 
-                users.id,
-                users.name,
-                COALESCE(COUNT (urls), 0)::INTEGER as "linksCount",
-                COALESCE(SUM (urls."visitCount"), 0)::INTEGER as "visitCount"
-            FROM 
-                users
-            LEFT JOIN urls
-            ON users.id=urls."userId"
-            GROUP BY users.id
-            ORDER BY "visitCount" DESC
-            LIMIT 10
-            `);
+		const ranking = rankingService.getRanking();
 
-		res.status(200).send(query.rows);
+		res.status(200).send(ranking);
 	} catch (err) {
 		res.sendStatus(500);
 		console.log(err);
